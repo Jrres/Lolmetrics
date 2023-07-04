@@ -1,0 +1,134 @@
+<script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@latest/pace-theme-default.min.css">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<style>
+
+@import url("https://fonts.googleapis.com/css?family=Raleway:400");
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+@font-face{
+  font-family: "Zed";
+  src:url('<%= asset_path("ZedSaid-wmx8.woff") %>') format('woff');
+}
+.title{
+font-family: "Zed";
+}
+* {
+	box-sizing: border-box;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 90deg;
+  inherits: true;
+}
+
+@property --gradX {
+  syntax: '<percentage>';
+  initial-value: 50%;
+  inherits: true;
+}
+
+@property --gradY {
+  syntax: '<percentage>';
+  initial-value: 0%;
+  inherits: true;
+}
+:root {
+	--d: 2500ms;
+	--angle: 90deg;
+	--gradX: 100%;
+	--gradY: 50%;
+	--c1: rgba(268, 239, 255, 1);
+	--c2: rgba(168, 239, 255, 0.1);
+}
+
+
+
+/* remove the input focus blue box, it will be in the wrong place. */
+
+/* Add the focus effect to the form so it contains the button */
+
+body {
+  	min-height: 100vh;
+	padding: 60px 0 45px;
+	background: linear-gradient(120deg, #000000, #00272B);
+  font-family: 'Varela Round', sans-serif;
+	text-align: center;
+	
+}
+.box {
+	font-size: 3vw;
+	margin: max(1rem, 3vw);
+	border: 0.35rem solid;
+	padding: 3vw;
+	border-image: conic-gradient(from var(--angle), var(--c2), var(--c1) 0.1turn, var(--c1) 0.15turn, var(--c2) 0.25turn) 30;
+	animation: borderRotate var(--d) linear infinite forwards;
+  color:white
+}
+
+.box:nth-child(2) {
+	border-image: radial-gradient(ellipse at var(--gradX) var(--gradY), var(--c1), var(--c1) 10%, var(--c2) 40%) 30;
+	animation: borderRadial var(--d) linear infinite forwards;
+}
+
+@keyframes borderRotate {
+	100% {
+		--angle: 420deg;
+	}
+}
+
+@keyframes borderRadial {
+	20% {
+		--gradX: 100%;
+		--gradY: 50%;
+	}
+	40% {
+		--gradX: 100%;
+		--gradY: 100%;
+	}
+	60% {
+		--gradX: 50%;
+		--gradY: 100%;
+	}
+	80% {
+		--gradX: 0%;
+		--gradY: 50%;
+	}
+	100% {
+		--gradX: 50%;
+		--gradY: 0%;
+	}
+}
+</style>
+      <% if flash[:alert] %>
+        <div class="alert alert-warning"><%= flash[:alert] %></div>
+      <% end %>
+<div class="box">
+<%= image_tag("champs/dianabg.gif",style:"opacity:20%;position:absolute; top: 50%;
+  left: 50%;
+    transform: translate(-50%, -50%);width:100%")%>
+<h1 class="display-4 d-flex justify-content-center title" >LolMetrics</h1>
+<div class="col-lg-12 mt-5">
+      <div class="mx-auto mt-5" style="width: 400px">
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 mt-5">
+      <div class="mx-auto mt-5" style="width: 400px">
+        <%= form_with(url: search_path, method: 'get', local: true) do %>
+          <div class="input-group" style="font-size:40px">
+            <%= label_tag :summoner, 'search for a summoner '%>
+            <%= text_field_tag :summoner, nil, placeholder: 'Faker', class: 'form-control' %>
+			<span class="material-symbols-outlined input-group-btn">
+			<%=  button_tag 'Search', class: 'btn btn-transparent ' %>
+			</span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+

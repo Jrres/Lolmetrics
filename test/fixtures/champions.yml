@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  winrate: 1.5
+  firstrune: MyText
+  secondrune: MyText
+  thirdrune: MyText
+  fourthrune: MyText
+
+two:
+  name: MyText
+  winrate: 1.5
+  firstrune: MyText
+  secondrune: MyText
+  thirdrune: MyText
+  fourthrune: MyText

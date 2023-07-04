@@ -1,0 +1,375 @@
+<!-- app/views/travel/search.html.erb -->
+
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Zilla+Slab+Highlight&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Raleway:400");
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+body{
+   font-family: 'Varela Round', sans-serif;
+}
+.list-container
+{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}.matches{
+align-items:center;
+
+white-space: nowrap; 
+
+display: grid;
+
+grid-auto-flow: row dense;
+grid-template-columns: repeat(2,minmax(150px,100px))
+}
+.participants{
+  width:25%;
+}
+.itemsinside{
+    
+    text-align:"right";
+
+}
+.its{
+  display:grid;
+  grid-template-columns: repeat(3,minmax(2px,30px));
+  grid-template-rows: repeat(2,minmax(2px,30px))
+}
+.its img{
+  width:20px;
+  height:20px 
+}
+img {
+    width:20px;
+    height:20px;
+}
+</style>
+<%=render 'nav_bar' %>
+<div class="container">
+  <div class="row ">
+    <div class="col">
+    <div class="card" aria-hidden="true" style="background: #ee0979;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ff6a00, #ee0979);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ff6a00, #ee0979); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
+     <div class="card-body">
+      <h4>Profile</h4>
+      <dl>        
+        <dd><%= image_tag "profileicon/#{@sum['profileIconId']}.png",{class:"rounded img-thumbnail",style:"width:100px;height:100px"} rescue image_tag "profileicon/1001.png" , {class:"rounded img-thumbnail",style:"width:100px;height:100px"} %></dd>
+        <dd><%= @sum['name'] %></dd>
+        <dt>Level:</dt>
+        <% if @sum['summonerLevel'] %>
+        <dd><%= @sum['summonerLevel'] %></dd>
+        <% else %>
+         <p class="card-text placeholder-glow  w-75">
+        <span class="placeholder col-7"></span>
+        </p>
+        <%end%>
+        <% if @rank[0] %>
+        <dt><%= @rank[0]['queueType'] %></dt>
+         <% else %>
+         <p class="card-text placeholder-glow w-75">
+        <span class="placeholder col-7"></span>
+        </p>
+        <%end%>
+        <div style="display:flex;flex-direction:row;">
+        <%= image_tag "ranks/#{@rank[0]['tier']}.png" ,style:"width:50px;height:50px" rescue image_tag "ranks/IRON.png" %>
+        <div style="width: 600px; height: 400px;top: 0px;position: absolute;right: 0px ">
+        <p class="text-dark">recently played in the last 10 games</p>
+        <%= pie_chart @mp,library: {backgroundColor: "#ee0979"},colors: ["#F72585", "#B5179E","#7209B7","#560BAD","#480CA8","#3A0CA3","#3F37C9","#4361EE","#4895EF","#4CC9F0"],style:"background-color:#8ddad5"  %>
+        </div>
+        <dd style="word-spacing: 10px;padding:10px">
+         <% if @rank[0] %>
+        <%= @rank[0]['tier'] %>
+         <% else %>
+         <p class="card-text placeholder-glow w-75">
+        <span class="placeholder col-7"></span>
+        </p>
+        <%end%>
+        </dd>
+        <dd style="word-spacing: 10px;padding:8px"">
+         <% if @rank[0] %>
+        <%= @rank[0]['rank'] %>
+        <% else %>
+        <p class="card-text placeholder-glow w-75">
+        <span class="placeholder col-7"></span>
+        </p>
+        <%end%>
+        </dd>
+        <dd style="word-spacing: 10px;padding:10px"">
+        <%if @rank[0]%>
+        <%= @rank[0]['wins']%>W
+        <%else%>
+        <p class="card-text placeholder-glow w-75">
+        <span class="placeholder col-7"></span>
+        </p>
+        <%end%>
+        </dd>
+        <dd style="word-spacing: 10px;padding:10px">
+        <%if @rank[0]%>
+        <%= @rank[0]['losses']%>L
+        <%else%>
+        <p class="card-text placeholder-glow w-75">
+        <span class="placeholder col-7"></span>
+        </p>
+        <%end%>
+        </dd>
+         <%if @rank[0]%>
+        <dt style="word-spacing: 10px;padding:10px;z-index:1000">WR:</dt>
+        <dd style="word-spacing: 10px;padding:10px; z-index:1000"><%= @wr.round(2) %></dd>
+        <%end%>
+        
+        
+       </div>
+        </div>
+       
+      </dl>
+      </div>
+
+       <h2>
+        Match History:
+        </h2>
+        Outcome:
+      <ul class="list-group">
+       
+      <% for i in 0..9 do %>
+      <li class="list-group-item"> 
+      <% if @wins[i] == "victory" %>
+          <div class="alert alert-primary"> Victory <%= flash[:alert] %>
+          <%= @matches[i]['info']['gameDuration']/60%>m
+          <p>
+      <button class="btn float-end alert-primary" type="button" data-bs-toggle="collapse" data-bs-target='#col<%=i%>' aria-expanded="false" aria-controls="collapseExample" >
+        <span class="material-symbols-outlined">
+        expand_more
+        </span>
+    </button>
+      </p>
+          </div>
+      <% else%>
+        <div class="alert alert-danger"> DEFEAT <%= flash[:alert] %>
+        <%= @matches[i]['info']['gameDuration']/60%>m
+        <p>
+      <button class="btn float-end alert-danger" type="button" data-bs-toggle="collapse" data-bs-target='#col<%=i%>' aria-expanded="false" aria-controls="collapseExample">
+        <span class="material-symbols-outlined">
+        expand_more
+        </span>
+    </button>
+      </p>
+        </div>
+      <% end %>
+      
+  <div class="collapse" id='col<%=i%>'>
+    <div class="card restore">
+           <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <%= button_tag "Gold" ,{class: "nav-link active", id: "nav-home-tab", 'data-bs-toggle': "tab", 'data-bs-target': "#nav-home"+i.to_s ,type:"button", role:"tab", 'aria-controls': "nav-home", "aria-selected": "true",href:"$" }
+           %>
+            
+            <%= button_tag "Damage Dealt To Champions", {class:"nav-link", id:"nav-profile-tab", "data-bs-toggle": "tab", "data-bs-target": "#nav-profile"+i.to_s,  type:"button" ,role:"tab", "aria-controls": "nav-profile", "aria-selected": "false"}
+            %>
+            
+            <%= button_tag "Damage Taken" ,{class:"nav-link", id:"nav-contact-tab", "data-bs-toggle": "tab", "data-bs-target": "#nav-contact"+i.to_s,  type:"button" ,role:"tab", "aria-controls": "nav-contact", "aria-selected": "false" }
+           %>
+            
+         
+          </div>
+<% val =  @matches[i]['info']['participants'] %>
+      <div class="tab-content" id="nav-tabContent" style="background:url(assets/bg.jpeg)">
+        <div class="tab-pane fade show active" id="nav-home<%=i%>" role="tabpanel" aria-labelledby="nav-home-tab">
+<%= bar_chart  [
+  {
+    name: "gold", 
+    data: [[val[0]['summonerName'], val[0]['goldEarned'] ],[val[1]['summonerName'], val[1]['goldEarned']],[val[2]['summonerName'], val[2]['goldEarned']],[val[3]['summonerName'], val[3]['goldEarned']],[val[4]['summonerName'], val[4]['goldEarned']],[val[5]['summonerName'], val[5]['goldEarned']],[val[6]['summonerName'], val[6]['goldEarned']],[val[7]['summonerName'], val[7]['goldEarned']],[val[8]['summonerName'], val[8]['goldEarned']],[val[9]['summonerName'], val[9]['goldEarned']]]
+  },
+],  ytitle: "Participants" , xtitle: "gold gained",width:"100%",height:"100%",download:true,id:"stats1#{i}",colors:["gold"] , library: {backgroundColor: "transparent"}, legend:{textStyle:{color:"white"}}%>
+
+</div>
+        <div class="tab-pane fade" id="nav-profile<%=i%>" role="tabpanel" aria-labelledby="nav-profile-tab">    <%= 
+ bar_chart  [
+  {
+    name: "damage to champions", 
+    data: [[val[0]['summonerName'], val[0]['totalDamageDealtToChampions']],[val[1]['summonerName'], val[1]['totalDamageDealtToChampions']],[val[2]['summonerName'], val[2]['totalDamageDealtToChampions']],[val[3]['summonerName'], val[3]['totalDamageDealtToChampions']],[val[4]['summonerName'], val[4]['totalDamageDealtToChampions']],[val[5]['summonerName'], val[5]['totalDamageDealtToChampions']],[val[6]['summonerName'], val[6]['totalDamageDealtToChampions']],[val[7]['summonerName'], val[7]['totalDamageDealtToChampions']],[val[8]['summonerName'], val[8]['totalDamageDealtToChampions']],[val[9]['summonerName'], val[9]['totalDamageDealtToChampions']]]
+  }
+ ], ytitle: "Participants" , xtitle: "damage dealt",width:"100%",height:"100%",download:true,id:"stats2#{i}",colors:["red"], library: {backgroundColor: "transparent"} ,legend:{textStyle:{color:"white"}}%>
+</div>
+        <div class="tab-pane fade" id="nav-contact<%=i%>" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <%=
+ bar_chart [
+  {
+    name: "damage taken", 
+    data: [[val[0]['summonerName'], val[0]['totalDamageTaken']],[val[1]['summonerName'], val[1]['totalDamageTaken']],[val[2]['summonerName'], val[2]['totalDamageTaken']],[val[3]['summonerName'], val[3]['totalDamageTaken']],[val[4]['summonerName'], val[4]['totalDamageTaken']],[val[5]['summonerName'], val[5]['totalDamageTaken']],[val[6]['summonerName'], val[6]['totalDamageTaken']],[val[7]['summonerName'], val[7]['totalDamageTaken']],[val[8]['summonerName'], val[8]['totalDamageTaken']],[val[9]['summonerName'], val[9]['totalDamageTaken']]]
+  }
+ ], ytitle: "Participants" , xtitle: "damage taken", width:"100%",height:"100%",download:true,id:"stats3#{i}",colors:["cyan"], library: {backgroundColor: "transparent"}, legend:{textStyle:{color:"white"}}%>
+ 
+        </div>
+      </div>
+    <% val =  @matches[i]['info']['participants'] %>
+ <%if @matches[i]['info']%>
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+   <li class="breadcrumb-item" style="width:100px">Champion</li>
+    <li class="breadcrumb-item" style="width:100px">Name</li>
+    <li class="breadcrumb-item"style="width:100px">Role</li>
+    <li class="breadcrumb-item active" aria-current="page" style="width:100px">KDA</li>
+        <li class="breadcrumb-item "style="width:180px">Build</li>
+    <li class="breadcrumb-item active" aria-current="page" style="width:100px">Runes</li>
+    <li class="breadcrumb-item" style="width:65px">CS</li>
+    <li class="breadcrumb-item"style="width:max-content">VS</li>
+    <li class="breadcrumb-item active" aria-current="page"style="width:max-content">Total Damage</li>
+  
+  </ol>
+</nav>
+          <div class="alert alert-primary list-container" style="padding:12px">
+         <%= render 'team_li',ps: @matches[i]['info']['participants'],i:i,left:0,right:5%>
+          </div>
+          <div class="alert alert-danger list-container" style="padding:12px">
+         <%= render 'team_li',ps: @matches[i]['info']['participants'],i:i,left:5,right:10%>
+          </div>
+<%end%>
+</div>
+  </div>
+      <div class="d-flex p-3" style="flex: 1;">
+ 
+          <%if @matches[i]['info']%>
+         <% @matches[i]['info']['participants'].each do |member| %>
+         <% if member['summonerName'] == @sum['name'] && member %>
+      <div class="d-flex flex-column w-25 text-truncate">
+      <%if member['summonerName'].length>11 %>
+            <%= member['summonerName'][1..8] %>...
+            <%else%>
+            <%= member['summonerName']%>
+            <%end%>
+      <div class="rounded float-left" alt="..." >
+         <%=image_tag "champs/#{member['championName']}.png", style:"width:50px;height:50px" rescue image_tag 'item/1001.png'%>
+         <dd class="badge bg-secondary text-light position-absolute rounded-pill" style="transform:translate(-20px,30px)"><%= member['champLevel'] %></dd>
+         </div>
+            <%= member['championName'] %>
+            <%if member['role'] !="NONE" %>
+            <div class="badge rounded-pill bg-secondary" style="width:80px">
+
+            <%= member['role'] %>
+            </div>
+            <%else%>
+            <div class="badge rounded-pill bg-secondary" style="width:60px">
+            JUNGLE
+            </div>
+            <%end%>
+            <% if member['challenges']%>
+           <dt>KDA: <%= (member['challenges']['kda']).round(2) %></dt>
+            <%end%>
+        
+            <%= member['kills'] %>  / <%= member['deaths'] %> / <%= member['assists'] %>
+           
+            <div class="its"> 
+            <%=  image_tag "item/#{member['item0']}.png" rescue image_tag 'item/1007050.png' %>
+        
+        
+            <%= image_tag "item/#{member['item1']}.png" rescue image_tag 'item/7050.png' %>
+        
+        
+            <%= image_tag "item/#{member['item2']}.png" rescue image_tag 'item/7050.png' %>
+        
+        
+            <%= image_tag "item/#{member['item3']}.png" rescue image_tag 'item/7050.png' %>
+        
+        
+            <%= image_tag "item/#{member['item4']}.png" rescue image_tag 'item/7050.png' %>
+        
+        
+            <%= image_tag "item/#{member['item5']}.png" rescue image_tag 'item/7050.png' %>
+        
+        
+            <%= image_tag "item/#{member['item6']}.png" rescue image_tag 'item/7050.png' %>
+            </div>
+            </div>
+            <div class="d-flex flex-column w-50" >
+             
+            Spell1:
+            <%=image_tag "spell/#{summonerId(member['summoner1Id'])}"%>
+             Spell2:
+            <%=image_tag "spell/#{summonerId(member['summoner2Id'])}"%>
+             <% if member['summonerName'] == @sum['name'] && maxKd(member['kills'],@matches[i]['info']['participants'])%>
+            <div class="text-center position-absolute align-self-center" style="color:gold;font-family: 'Zilla Slab Highlight', cursive;font-size:40px">
+            MVP
+            </div class="d-flex flex-column w-50">
+            <%end%>
+            Runes:
+            <div>
+            <%member['perks']['styles'][0]['selections'].each do |rune|%>
+            
+            <%= image_tag "#{runeId(rune['perk'],rune["var1"])}" , style: "width:30px;height:30px"  %>
+           
+            <%end%>
+            </div>
+
+            <ol class="breadcrumb ">
+              <li class="breadcrumb-item active alert alert-warning" aria-current="page">
+            CS:
+            <%= member['totalMinionsKilled'] + member['neutralMinionsKilled'] %>
+            </li>
+            <li class="breadcrumb-item alert alert-warning ">
+            Vision Score:
+            <%=member['visionScore']%>
+            </li>
+            <li class="breadcrumb-item alert alert-warning">
+            Damage dealt: 
+            <%=member['totalDamageDealt']%>
+            </li>
+            </ol>
+            
+            </div>
+    
+         <%end%>
+         <%end%>
+         <%end%>
+
+        <div class="matches">
+        <% if @matches[i]['info'] %>
+        <div class="participants">
+        <dt>Team 1</dt>
+        <% @matches[i]['info']['participants'].slice(0,5).each do |member| %>
+        <div class="itemsinside">
+            <%if member['summonerName'].length>11 %>
+            <dd> <%= link_to member['summonerName'][0..8]+"...",search_path(summoner:member['summonerName']) %></dd>        
+            <%=image_tag "champs/#{member['championName']}.png" rescue image_tag 'item/7050.png'%>
+            <%else%>
+            <dd> <%= link_to member['summonerName'],search_path(summoner:member['summonerName']) %></dd>        
+            <%=image_tag "champs/#{member['championName']}.png" rescue image_tag 'item/7050.png'%>
+            <%end%>
+           
+       
+        </div>
+        <%end %>
+        </div>
+        <div class="participants">
+        <dt>Team 2</dt>
+        <% @matches[i]['info']['participants'].slice(5,10).each do |member| %>
+        <div class="itemsinside">
+    
+           <%if member['summonerName'].length>11 %>
+            <dd> <%= link_to member['summonerName'][0..8]+"...",search_path(summoner:member['summonerName']) %></dd>        
+            <%=image_tag "champs/#{member['championName']}.png" rescue image_tag 'item/7050.png'%>
+            <%else%>
+            <dd> <%= link_to member['summonerName'],search_path(summoner:member['summonerName']) %></dd>        
+            <%=image_tag "champs/#{member['championName']}.png" rescue image_tag 'item/7050.png'%>
+            <%end%>
+        </div>
+        <%end %>
+        </div>
+        <%end%>
+        <%end%>
+        </div>
+    </div>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="spinner" style="display:none">
+<%= image_tag "loading.gif"%>
+</div>

@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<style>
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 20%;
+  }
+}
+@font-face{
+  font-family: "Zed";
+  src:url('<%= asset_path("ZedSaid-wmx8.woff") %>') format('woff');
+}
+.rolefield{
+ background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));
+}
+</style>
+<% ps.slice(left,right).each do |member| %>
+      
+      <div class="d-flex flex-row" style="height:50px;text-align:center">
+
+        <div class="rounded" alt="..." style="width:100px;display:flex">
+            <%=image_tag "champs/#{member['championName']}.png", style:"width:50px;height:50px;position:relative" rescue image_tag 'item/7050.png'%>
+            <div class=" rounded fluid d-flex flex-column" style="width:100px">
+            <%=image_tag "spell/#{summonerId(member['summoner1Id'])}"%>
+             
+            <%=image_tag "spell/#{summonerId(member['summoner2Id'])}"%>
+            </div>
+            <div class=" text-light rounded-pill bg-dark" style="position:absolute;transform:translate(30px,30px)"><%= member['champLevel'] %></div>
+
+             <% if  maxKd(member['kills'],@matches[i]['info']['participants'])%>
+             <div class="text-center align-self-center" style="font-size:15px;color:purple;font-family: 'Zilla Slab Highlight', cursive;">
+            MVP
+            </div >
+            <%end%>
+        </div>  
+            <div style="width:100px">
+            <%if member['summonerName'].length>11 %>
+            <%= member['summonerName'][0..8] %>...
+            <%else%>
+            <%= member['summonerName']%>
+            <%end%>
+            </div>
+            <%if member['role'] !="NONE" %>
+            <div class="rolefield" style="width:100px">
+
+            <%= member['role'] %>
+            </div>
+            <%else%>
+            <div class="rolefield" style="width:100px">
+            JUNGLE
+            </div>
+            <%end%>
+            <div class="text-nowrap" style="width:100px;display:block">
+            <% if member['challenges']%>
+            <div class="text-success" >
+            <%= member['challenges']['kda'].round(2) %>
+            </div>
+            <%end%>
+            <div>
+            <%= member['kills'] %>  
+            | 
+            <%= member['deaths'] %> 
+            | 
+            <%= member['assists'] %>
+            </div>
+            
+            </div>
+            <div style="width:max-content"> 
+            
+            <%=  image_tag "item/#{member['item0']}.png" rescue image_tag 'item/7050.png' %>
+        
+            <%= image_tag "item/#{member['item1']}.png" rescue image_tag 'item/7050.png' %>
+        
+            <%= image_tag "item/#{member['item2']}.png" rescue image_tag 'item/7050.png' %>
+         
+            <%= image_tag "item/#{member['item3']}.png" rescue image_tag 'item/7050.png' %>
+        
+            <%= image_tag "item/#{member['item4']}.png" rescue image_tag 'item/7050.png' %>
+        
+            <%= image_tag "item/#{member['item5']}.png" rescue image_tag 'item/7050.png' %>
+            
+            <%= image_tag "item/#{member['item6']}.png" rescue image_tag 'item/7050.png' %>
+        
+            </div>
+            <div style="width:100px">
+            <%= image_tag "#{runeId(member['perks']['styles'][0]['selections'][0]['perk'],member['perks']['styles'][0]['selections'][0]["var1"])}" , style: "width:30px;height:30px"  %>
+           <button type="button" class="btn btn-transparent dropdown-toggle w-25" data-bs-toggle="dropdown" aria-expanded="false">
+           
+          </button>
+            <ul class="dropdown-menu">
+            <%member['perks']['styles'][0]['selections'].each do |rune|%>
+            
+            <li class="dropdown-item"><%= image_tag "#{runeId(rune['perk'],rune["var1"])}" , style: "width:30px;height:30px"  %></li>
+           
+            <%end%>
+            </ul>
+            </div>
+
+            <div class=" p-2 text-warning" style="width:50px">
+          
+            <%= member['totalMinionsKilled'] + member['neutralMinionsKilled']%>
+            
+            </div>
+            <div class=" p-2 text-dark " style="width:100px">
+            <%=member['visionScore']%>
+            </div>
+          
+            <%maxkd = getMax(@matches[i]['info']['participants'])
+            ratio = member['totalDamageDealt'].to_f/maxkd 
+            ratio = ratio*100
+            puts maxkd,ratio
+            %>
+            <div class="progress" style="width:100px">
+            <div class="progress-bar bg-danger progress-bar-animated text-dark" role="progressbar" aria-valuenow="<%=ratio%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=ratio%>%"><%=member['totalDamageDealt']%></div>
+            
+            </div>
+            <%=ratio.round()%>%
+            </div>
+            
+         <%end%>
+       <%if ps[left]['win'] %>
+       <div class="text-end bd-highlight float-right" style="font-family:Zed">
+       victory
+       </div>
+       <%else%>
+       <div class="text-end bd-highlight float-right" style="font-family:Zed">
+       Defeat
+       </div>
+       <%end%>

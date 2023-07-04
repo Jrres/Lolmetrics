@@ -1,0 +1,105 @@
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/satellite-min.css"
+    integrity="sha256-p/rGN4RGy6EDumyxF9t7LKxWGg6/MZfGhJM/asKkqvA="
+    crossorigin="anonymous"
+  />
+
+  <script type="text/html" id="hit-template">
+    <div class="hit">
+    <a href="champion/{{{name}}}">
+      <p class="hit-name">
+        {{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}
+      </p>
+      <img src="assets/champs/{{{image}}}" style="width:20px;height:20px"/>
+
+    </a>
+    </div>
+  </script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/algoliasearch@4.18.0/dist/algoliasearch-lite.umd.js"
+    integrity="sha256-V3GHVlMSAsogT3wL0OY/l4d3fRLa56gNzlnzdIMBIWg="
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.56.3/dist/instantsearch.production.min.js"
+    integrity="sha256-mWvjWAfZylKMOg+S3HLq+wng1HHRnl2Idr2r8NsUzIU="
+    crossorigin="anonymous"
+  ></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Akronim&family=Varela+Round&family=Zilla+Slab+Highlight&display=swap');
+  </style>
+<nav class="navbar navbar-light bg-light fixed-top text-dark">
+  <div class="container-fluid">
+    <%= image_tag "bilgewater.jpeg", style:"width:25px;height:25px"%>
+    <%= link_to "LolMetrics", root_path, style:"
+font-family: 'Akronim', cursive;font-size:20px" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <%= link_to "champions", champion_path %>
+          </li>
+        </ul>
+      
+            <header>
+              <div id="search-box"></div>
+            </header>
+
+            <main>
+              <div id="hits"></div>
+              <div id="pagination"></div>
+            </main>
+          
+      </div>
+    </div>
+  </div>
+</nav>
+  <script >
+  // Replace with your own values
+const searchClient = algoliasearch(
+  'ANX2HGV4XV',
+  '0a661c88e9e381cc2b7aa250bd376360' // search only API key, not admin API key
+)
+
+const search = instantsearch({
+  indexName: 'contacts',
+  searchClient,
+  routing: true,
+})
+
+search.addWidgets([
+  instantsearch.widgets.configure({
+    hitsPerPage: 10,
+  }),
+])
+
+search.addWidgets([
+  instantsearch.widgets.searchBox({
+    container: '#search-box',
+    placeholder: 'Search for champions',
+  }),
+])
+
+search.addWidgets([
+  instantsearch.widgets.hits({
+    container: '#hits',
+    templates: {
+      item: document.getElementById('hit-template').innerHTML,
+      empty: `We didn't find any results for the search <em>"{{query}}"</em>`,
+    },
+  }),
+])
+
+search.start()
+
+  </script>
